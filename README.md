@@ -9,5 +9,5 @@ Students are expected to:
 Student Info
 =========================
 
-* Student Name: Nguyen Tri Thanh
-* Student ID: bi11-245
+* Student Name: Nguyễn Trí Thành
+* Student ID: BI11-245
