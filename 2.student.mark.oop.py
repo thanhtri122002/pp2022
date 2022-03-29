@@ -3,9 +3,6 @@ list_student = []
 list_course = []
 list_mark = []
 #init dictionary to store students marks in 1 course
-#key: student_id and course_mark (a dictionary)
-student_course_mark = {'student_id': None, 'course_mark' :{'course_id':None, 'mark':None}}
-
 
 #function to enter number of students of a given course
 #effect: insert number of students
@@ -34,7 +31,6 @@ def input_no_courses():
 class Person:
     def __init__(self,name,DoB):
         self._name = name
-        
         self._DoB = DoB
 
 class Student(Person):
@@ -66,24 +62,8 @@ class Mark():
         self._cid = cid
         self._mark = mark
     def add_mark(self):#method to add a mark object to list_mark
-            for j in list_student:
-                student_course_mark['student_id'] = j._id
-                for i in list_course:
-                    student_course_mark['course_mark']['course_id'] = i._id
-                while True:
-                    student_course_mark['course_mark']['mark'] = float(input('Enter the mark of student: '))
-                    if student_course_mark['course_mark']['mark'] <0 or student_course_mark['course_mark']['mark'] > 20:
-                        print('Invalid mark!')
-                        print('Enter again!')
-                        continue
-                    else:
-                        ob_mark = Mark(student_course_mark['student_id'],
-                        student_course_mark['course_mark']['course_id'],
-                        student_course_mark['course_mark']['mark'])
-                        list_mark.append(ob_mark)#list of object marks
-                        break
-                print('\n')
-    
+        ob_mark = Mark(self._sid, self._cid, self._mark)
+        list_mark.append(ob_mark)
 
 #function to show list_marks
 def show_list_mark():
@@ -100,7 +80,7 @@ def show_list_course():
         for i in list_course:
             print('course_id: ',i._id,'\ncourse_name: ',i._name)
             print('\n')
-
+        
 #function to show marks of a course
 def show_marks_1course(course_id):
             for i in list_mark:#i is objects of class Mark
@@ -118,13 +98,17 @@ def show_marks_1student(student_id):
                     '\ncourse_id: ',i._cid,
                     '\nmark: ',i._mark)
                     print('\n')
-                       
+
 #driver code
 "\t\t\twelcome to the program".upper()
 "\t\t\tbegin the program".upper()
+'Instructions:'
+'There are 2 types of courses: Normal course and Special course'
+'Normal course: all student are required to take the course'
+'Special course: only some students are required to take the course'
 print('\n')
 while True:
-    opt = int(input('\n----------------------------------------Menu--------------------------------------------\n\nEnter an option:\n  1.Input students info/add students\n  2.Input courses/add course\n  3.Add marks for all courses in the list\n  4.Show the course list\n  5.Show the student list\n  6.Show the marks\n  7.Show marks 1 course\n  8.Show marks of 1 student\n  9.End the program\n\nYour choice: '))
+    opt = int(input('\n----------------------------------------Menu--------------------------------------------\n\nEnter an option:\n  1.Input students info/add students\n  2.Input courses/add course\n  3.Add marks for normal courses in the list\n  4.Add marks for special course\n  5.Show marks of 1 student\n  6.Show the marks of a course\n  7.Show marks list\n  8.Show students list\n  9.Show course list\n 10.End the program\n\nYour choice: '))
     if opt == 1:
         no_student = input_no_students() 
         for i in range(no_student):
@@ -143,52 +127,101 @@ while True:
             ob_course = Course(id,name)
             ob_course.add_course()
     elif opt == 3:
-        for i in list_course:
             print('\n\t\t\t-------------------------------------------')
-            print('\n\t\t\t\tCourse ID: ',i._id)
-            ob_mark = Mark(0,i._id,0)
-            ob_mark.add_mark()
+            while True:
+                course_id = input('Course you want to add mark: ')
+                if course_id not in [i._id for i in list_course]:
+                    print('Course not found!')
+                    print('Enter again!')
+                    continue
+                else:#input marks for a course
+                    for j in range(0,len(list_student)):
+                        print('Student ',j+1,': ',list_student[j]._name)
+                        while True:
+                            mark = float(input('Enter the mark: '))
+                            if mark <0 or mark >20:
+                                print('Invalid mark!')
+                                print('Enter again!')
+                                continue
+                            else:
+                                ob_mark = Mark(list_student[j]._id,course_id,mark)
+                                ob_mark.add_mark()
+                                break
+                break    
     elif opt == 4:
         print('\n\t\t\t-------------------------------------------')
-        show_list_course()
-    elif opt == 5:
-        print('\n\t\t\t-------------------------------------------')
-        show_list_student()
-    elif opt ==6:
-        print('\n\t\t\t-------------------------------------------')
-        show_list_mark()
-    elif opt == 7:
-        print('\n\t\t\t-------------------------------------------')
-        print('Enter the course id you want to see the marks:')
         while True:
-            course_id = input('Enter the course id: ')
-            if course_id == '' or course_id not in [i._cid for i in list_mark]:
-                print('Invalid course name!')
+            course_id = input('Enter the course ID you want to add marks:')
+            if course_id not in [i._id for i in list_course]:
+                print('Course not found!')
                 print('Enter again!')
                 continue
             else:
-                show_marks_1course(course_id)
+                no_student_intake = int(input('Enter the number of students intake: '))
+                while True:
+                    #if the number of students intake is greater than the number of students or less than 0 then it will ask to input again
+                    if no_student_intake > len(list_student) or no_student_intake < 0:
+                        print('Invalid number of students intake!')
+                        print('Enter again!')
+                        continue
+                    else:
+                        while True:
+                            student_id = input('Enter the student ID: ')
+                            if student_id not in [i._id for i in list_student]:
+                                print('Invalid student ID!')
+                                print('Enter again!')
+                                continue
+                            else:
+                                while True:
+                                    mark = float(input('Enter the mark: '))
+                                    if mark <0 or mark >20:
+                                        print('Invalid mark!')
+                                        print('Enter again!')
+                                        continue
+                                    else:
+                                        for i in range(0,no_student_intake):
+                                            ob_mark = Mark(student_id,course_id,mark)
+                                            ob_mark.add_mark()
+                                        break
+                            break
+                        break
                 break
-    elif opt == 8:
+    elif opt == 5:
         print('\n\t\t\t-------------------------------------------')
         while True:
             print('Enter the student ID you want to see the marks:')
             student_id = input('Enter the student ID: ')
-            if student_id == '':
+            if student_id not in [i._sid for i in list_mark]:
                 print('Invalid student ID!')
                 print('Enter again!')
                 continue
             else:
                 show_marks_1student(student_id)
                 break  
+    elif opt ==6:
+        print('\n\t\t\t-------------------------------------------')
+        print('Enter the course id you want to see the marks:')
+        while True:
+            course_id = input('Course id: ')
+            if course_id not in [i._id for i in list_course]:
+                print('Course not found!')
+                print('Enter again!')
+                continue
+            else:
+                show_marks_1course(course_id)
+                break
+    elif opt == 7:
+        print('\n\t\t\t-------------------------------------------')
+        show_list_mark()
+    elif opt == 8:
+        print('\n\t\t\t-------------------------------------------')
+        show_list_student()
     elif opt == 9:
         print('\n\t\t\t-------------------------------------------')
-        print('\n\t\t\t\tThank you for using the program!')
+        show_list_course()
+    elif opt == 10:
+        print('\n\t\t\t-------------------------------------------')
+        print('End the program!')
         break
-    else:
-        print('\n\t\t\t-------------------------------------------')
-        print('Invalid option!')
-        print('\n\t\t\t-------------------------------------------')
-        continue
 
 
