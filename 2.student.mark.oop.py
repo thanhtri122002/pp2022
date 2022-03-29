@@ -103,7 +103,7 @@ def show_marks_1student(student_id):
 "\t\t\twelcome to the program".upper()
 "\t\t\tbegin the program".upper()
 'Instructions:'
-'There are 2 types of courses: Normal course and Special course'
+'There are 2 types of course: Normal course and Special course'
 'Normal course: all student are required to take the course'
 'Special course: only some students are required to take the course'
 print('\n')
@@ -182,10 +182,10 @@ while True:
                                         for i in range(0,no_student_intake):
                                             ob_mark = Mark(student_id,course_id,mark)
                                             ob_mark.add_mark()
-                                        break
-                            break
-                        break
-                break
+                                        break# the loop of input mark
+                            break# the loop of input student_id
+                        break# the loop of input number of students intake
+                break# the loop of input course_id
     elif opt == 5:
         print('\n\t\t\t-------------------------------------------')
         while True:
@@ -221,6 +221,7 @@ while True:
         show_list_course()
     elif opt == 10:
         print('\n\t\t\t-------------------------------------------')
+        print('Thank you for using the program!')
         print('End the program!')
         break
 
