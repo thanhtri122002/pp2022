@@ -11,7 +11,7 @@ gpa_student = {}
 #effect: insert number of students
 def input_no_students():
     while True:
-        no_students = int(input('Enter the number of students of the course: '))
+        no_students = int(input('Enter the number of students: '))
         if no_students <0:
             print('Invalid number of students!')
             print('Enter again!')
